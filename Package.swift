@@ -18,6 +18,9 @@ let package = Package(
         .target(
             name: "EdmondsKarp",
             dependencies: ["Basic", "Graphviz"]),
+        .target(
+            name: "Dinic",
+            dependencies: ["Basic", "EdmondsKarp"]),
         .testTarget(
             name: "NetworkFlowStudyTests",
             dependencies: ["EdmondsKarp"]),

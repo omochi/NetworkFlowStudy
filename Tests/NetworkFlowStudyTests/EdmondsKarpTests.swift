@@ -20,8 +20,7 @@ public final class EdmondsKarpTests: XCTestCase {
         g.addEdge(tail: 4, head: 3, capacity: 5, used: 1)
         g.addEdge(tail: 4, head: 5, capacity: 9, used: 6)
         
-        g.addFlow(path: [0, 2, 1, 4, 5], amount: 1)
-        
+        g.addFlow(Flow(path: [0, 2, 1, 4, 5], amount: 1))
         
         XCTAssertEqual(g.edge(at: g.edge(tail: 0, head: 2)!).used, 5)
         XCTAssertEqual(g.edge(at: g.edge(tail: 1, head: 2)!).used, 0)

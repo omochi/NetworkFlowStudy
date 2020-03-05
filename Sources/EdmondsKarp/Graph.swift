@@ -11,15 +11,15 @@ public struct Vertex {
 }
 
 public struct Edge {
-    public var end: Int
+    public var head: Int
     public var size: Int
     public var used: Int
     
-    public init(end: Int,
+    public init(head: Int,
                 size: Int,
                 used: Int = 0)
     {
-        self.end = end
+        self.head = head
         self.size = size
         self.used = used
     }
@@ -42,7 +42,7 @@ public struct Graph {
                 g.edges.append(
                     VEdge(
                         source: "\(v.id)",
-                        sink: "\(e.end)",
+                        sink: "\(e.head)",
                         label: "\(e.used)/\(e.size)"
                     )
                 )

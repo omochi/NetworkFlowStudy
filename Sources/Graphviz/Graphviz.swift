@@ -27,7 +27,7 @@ public struct VGraph: CustomStringConvertible {
             }
             
             for edge in edges {
-                b.write("\(edge.source) -> \(edge.sink) [")
+                b.write("\(edge.tail) -> \(edge.head) [")
                 b.nest { (b) in
                     b.write("label = \"\(edge.label)\"")                    
                 }
@@ -49,16 +49,16 @@ public struct VNode {
 }
 
 public struct VEdge {
-    public var source: String
-    public var sink: String
+    public var tail: String
+    public var head: String
     public var label: String
     
-    public init(source: String,
-                sink: String,
+    public init(tail: String,
+                head: String,
                 label: String)
     {
-        self.source = source
-        self.sink = sink
+        self.tail = tail
+        self.head = head
         self.label = label
     }
 }

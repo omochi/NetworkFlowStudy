@@ -1,3 +1,3 @@
-# NetworkFlowStudy
+# Resources
 
-A description of this package.
+http://hos.ac/slides/20150319_flow.pdf

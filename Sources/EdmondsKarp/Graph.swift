@@ -16,25 +16,20 @@ public struct Vertex {
     public func edge(to head: Int) -> Edge? {
         edges.first { $0.head == head }
     }
-    
-    public mutating func modifyEdge(to head: Int, _ f: (inout Edge) -> Void) {
-        let index = edges.firstIndex { $0.head == head }!
-        f(&edges[index])
-    }
 }
 
 public struct Edge: Modifiable {
     public var head: Int
-    public var size: Int
+    public var capacity: Int
     public var used: Int
-    public var rem: Int { size - used }
+    public var rem: Int { capacity - used }
     
     public init(head: Int,
-                size: Int,
+                capacity: Int,
                 used: Int = 0)
     {
         self.head = head
-        self.size = size
+        self.capacity = capacity
         self.used = used
     }
 }
@@ -108,19 +103,19 @@ public struct Graph {
     
     public func residual() -> Graph {
         var g = Graph(source: source, sink: sink)
-        for v in vertices {
+        for _ in vertices {
             g.addVertex(edges: [])
         }
         for i in vertices.indices {
             for e in vertices[i].edges {
                 if e.rem > 0 {
                     g.vertices[i].edges.append(
-                        Edge(head: e.head, size: e.rem)
+                        Edge(head: e.head, capacity: e.rem)
                     )
                 }
                 if e.used > 0 {
                     g.vertices[e.head].edges.append(
-                        Edge(head: i, size: e.used)
+                        Edge(head: i, capacity: e.used)
                     )
                 }
             }
@@ -139,7 +134,7 @@ public struct Graph {
                     VEdge(
                         tail: "\(i)",
                         head: "\(e.head)",
-                        label: "\(e.used)/\(e.size)"
+                        label: "\(e.used)/\(e.capacity)"
                     )
                 )
             }
@@ -152,8 +147,7 @@ extension Graph {
     public func breadthFirstSearch() -> [Int]? {
         struct VertexInfo {
             public var isFound: Bool = false
-            public var isVisited: Bool = false
-            public var head: Int?
+            public var tail: Int?
         }
         
         var infos = vertices.map { (_) in VertexInfo() }
@@ -164,19 +158,13 @@ extension Graph {
                 return nil
             }
             nexts.removeFirst()
-            
-            if infos[current].isVisited {
-                continue
-            }
-            
-            infos[current].isVisited = true
-            
+
             if current == sink {
                 var i = current
                 var revPath: [Int] = [i]
                 while true {
                     if i == source { break }
-                    i = infos[i].head!
+                    i = infos[i].tail!
                     revPath.append(i)
                 }
                 return revPath.reversed()
@@ -186,7 +174,7 @@ extension Graph {
                 if infos[e.head].isFound { continue }
             
                 infos[e.head].isFound = true
-                infos[e.head].head = current
+                infos[e.head].tail = current
                 nexts.append(e.head)
             }
         }
@@ -219,8 +207,6 @@ extension Graph {
             let amount = r.amount(of: path)
             
             g.add(path: path, amount: amount)
-            
-            print(g.draw())
         }
     }
 }

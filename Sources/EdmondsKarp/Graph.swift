@@ -41,8 +41,8 @@ public struct Graph {
             for e in v.edges {
                 g.edges.append(
                     VEdge(
-                        source: "\(v.id)",
-                        sink: "\(e.head)",
+                        tail: "\(v.id)",
+                        head: "\(e.head)",
                         label: "\(e.used)/\(e.size)"
                     )
                 )

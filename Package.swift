@@ -11,11 +11,13 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "Basic"),
+        .target(
             name: "Graphviz",
             dependencies: []),
         .target(
             name: "EdmondsKarp",
-            dependencies: ["Graphviz"]),
+            dependencies: ["Basic", "Graphviz"]),
         .testTarget(
             name: "NetworkFlowStudyTests",
             dependencies: ["EdmondsKarp"]),

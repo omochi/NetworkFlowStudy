@@ -18,6 +18,11 @@ public final class ImageWriter {
     private let directory: URL
     private var counter: Int
     
+    public static let `default` = ImageWriter(
+        directory: fm.temporaryDirectory
+            .appendingPathComponent(Randoms.randomString(length: 12))
+    )
+    
     public init(directory: URL) {
         self.directory = directory
         self.counter = 0

@@ -1,6 +1,24 @@
 import XCTest
 import EdmondsKarp
 
+func assertFlowAmount(graph g: Graph,
+                      amount: Int,
+                      file: StaticString = #file,
+                      line: UInt = #line)
+{
+    do {
+        let edges = g.edges(from: g.source).map { g.edge(at: $0) }
+        let sum = edges.map(\.used).reduce(0, +)
+        XCTAssertEqual(sum, amount, file: file, line: line)
+    }
+    
+    do {
+        let edges = g.edges(to: g.sink).map { g.edge(at: $0) }
+        let sum = edges.map(\.used).reduce(0, +)
+        XCTAssertEqual(sum, amount, file: file, line: line)
+    }
+}
+
 public final class EdmondsKarpTests: XCTestCase {
     func testReverseFlow() {
         // http://hos.ac/slides/20150319_flow.pdf
@@ -47,18 +65,8 @@ public final class EdmondsKarpTests: XCTestCase {
         g.addEdge(tail: 4, head: 5, capacity: 9)
 
         g.edmondsKarp()
-    
-        do {
-            let edges = g.edges(from: g.source).map { g.edge(at: $0) }
-            let sum = edges.map(\.used).reduce(0, +)
-            XCTAssertEqual(sum, 17)
-        }
         
-        do {
-            let edges = g.edges(to: g.sink).map { g.edge(at: $0) }
-            let sum = edges.map(\.used).reduce(0, +)
-            XCTAssertEqual(sum, 17)
-        }
+        assertFlowAmount(graph: g, amount: 17)
     }
     
     func testSolve2() {
@@ -82,16 +90,6 @@ public final class EdmondsKarpTests: XCTestCase {
         
         g.edmondsKarp()
         
-        do {
-            let edges = g.edges(from: g.source).map { g.edge(at: $0) }
-            let sum = edges.map(\.used).reduce(0, +)
-            XCTAssertEqual(sum, 5)
-        }
-        
-        do {
-            let edges = g.edges(to: g.sink).map { g.edge(at: $0) }
-            let sum = edges.map(\.used).reduce(0, +)
-            XCTAssertEqual(sum, 5)
-        }
+        assertFlowAmount(graph: g, amount: 5)
     }
 }

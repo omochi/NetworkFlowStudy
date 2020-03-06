@@ -25,17 +25,7 @@ public final class DinicTests: XCTestCase {
 
         g.dinic()
     
-        do {
-            let edges = g.edges(from: g.source).map { g.edge(at: $0) }
-            let sum = edges.map(\.used).reduce(0, +)
-            XCTAssertEqual(sum, 17)
-        }
-        
-        do {
-            let edges = g.edges(to: g.sink).map { g.edge(at: $0) }
-            let sum = edges.map(\.used).reduce(0, +)
-            XCTAssertEqual(sum, 17)
-        }
+        assertFlowAmount(graph: g, amount: 17)
     }
     
     func testSolve2() {
@@ -57,21 +47,38 @@ public final class DinicTests: XCTestCase {
         g.addEdge(tail: 4, head: 3, capacity: 6)
         g.addEdge(tail: 4, head: 5, capacity: 10)
         
-        let tempDir = fm.temporaryDirectory
-            .appendingPathComponent(Randoms.randomString(length: 12))
-        g.imageWriter = ImageWriter(directory: tempDir)
         g.dinic()
         
-        do {
-            let edges = g.edges(from: g.source).map { g.edge(at: $0) }
-            let sum = edges.map(\.used).reduce(0, +)
-            XCTAssertEqual(sum, 19)
+        assertFlowAmount(graph: g, amount: 19)
+    }
+    
+    func testSolve3() {
+        // https://www.slideshare.net/KuoE0/acmicpc-dinics-algorithm
+        
+        var g = Graph(source: 0, sink: 9)
+        g.imageWriter = .default
+        
+        for _ in 0...9 {
+            g.addVertex()
         }
         
-        do {
-            let edges = g.edges(to: g.sink).map { g.edge(at: $0) }
-            let sum = edges.map(\.used).reduce(0, +)
-            XCTAssertEqual(sum, 19)
-        }
+        g.addEdge(tail: 0, head: 1, capacity: 30)
+        g.addEdge(tail: 0, head: 2, capacity: 10)
+        g.addEdge(tail: 1, head: 3, capacity: 15)
+        g.addEdge(tail: 1, head: 4, capacity: 5)
+        g.addEdge(tail: 2, head: 4, capacity: 5)
+        g.addEdge(tail: 2, head: 5, capacity: 5)
+        g.addEdge(tail: 3, head: 6, capacity: 10)
+        g.addEdge(tail: 3, head: 7, capacity: 10)
+        g.addEdge(tail: 4, head: 7, capacity: 5)
+        g.addEdge(tail: 4, head: 8, capacity: 5)
+        g.addEdge(tail: 5, head: 8, capacity: 6)
+        g.addEdge(tail: 6, head: 9, capacity: 15)
+        g.addEdge(tail: 7, head: 9, capacity: 7)
+        g.addEdge(tail: 8, head: 9, capacity: 10)
+        
+        g.dinic()
+        
+        assertFlowAmount(graph: g, amount: 27)
     }
 }

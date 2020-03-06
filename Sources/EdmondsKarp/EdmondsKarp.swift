@@ -65,9 +65,7 @@ extension Graph {
     
     public mutating func edmondsKarp() {
         while true {
-            guard let flow = breadthFirstSearch() else {
-                return
-            }
+            guard let flow = breadthFirstSearch() else { break }
             addFlow(flow)
         }
     }

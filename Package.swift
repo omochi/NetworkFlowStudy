@@ -22,8 +22,11 @@ let package = Package(
         .target(
             name: "Dinic",
             dependencies: ["Basic", "EdmondsKarp"]),
+        .target(
+            name: "PrimalDual",
+            dependencies: ["Basic"]),
         .testTarget(
             name: "NetworkFlowStudyTests",
-            dependencies: ["EdmondsKarp", "Dinic"]),
+            dependencies: ["EdmondsKarp", "Dinic", "PrimalDual"]),
     ]
 )

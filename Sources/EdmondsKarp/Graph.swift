@@ -137,6 +137,10 @@ public struct Graph {
         }
         return g
     }
+    
+    public func writeImage() {
+        try! imageWriter?.write(graph: toGraphviz())
+    }
 }
 
 public struct Flow {
@@ -147,5 +151,4 @@ public struct Flow {
         self.path = path
         self.amount = amount
     }
-
 }

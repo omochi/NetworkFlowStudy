@@ -56,7 +56,6 @@ public final class DinicTests: XCTestCase {
         // https://www.slideshare.net/KuoE0/acmicpc-dinics-algorithm
         
         var g = Graph(source: 0, sink: 9)
-        g.imageWriter = .default
         
         for _ in 0...9 {
             g.addVertex()

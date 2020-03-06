@@ -37,45 +37,67 @@ extension Graph {
             }
         }
     }
-    
-    internal struct DFSFlow {
-        var reversedPath: [Int]
-        var amount: Int
-        
-        func toFlow() -> Flow {
-            Flow(path: reversedPath.reversed(),
-                 amount: amount)
-        }
-    }
-    
-    internal func depthFirstSearch(
-        start: Int,
-        amount: Int,
-        depths: [Int]) -> DFSFlow?
-    {
-        if start == sink {
-            return DFSFlow(reversedPath: [start], amount: amount)
+
+    internal struct DFS {
+        struct _Flow {
+            var reversedPath: [Int]
+            var amount: Int
+            
+            func toFlow() -> Flow {
+                Flow(path: reversedPath.reversed(),
+                     amount: amount)
+            }
         }
         
-        let vi = start
-        let v = vertices[vi]
-        for ei in v.edges.indices {
-            let e = v.edges[ei]
-            guard e.rem > 0,
-                depths[vi] < depths[e.head]
-                else { continue }
-            
-            guard var flow = depthFirstSearch(
-                start: e.head,
-                amount: min(amount, e.rem),
-                depths: depths) else { continue }
-            
-            flow.reversedPath.append(start)
-            
-            return flow
+        var depths: [Int]
+        var startIndices: [Int]
+        
+        init(depths: [Int])
+        {
+            self.depths = depths
+            self.startIndices = Array(repeating: 0, count: depths.count)
         }
         
-        return nil
+        mutating func _search(graph: Graph,
+                              start: Int,
+                              amount: Int) -> _Flow?
+        {
+            if start == graph.sink {
+                return _Flow(reversedPath: [start], amount: amount)
+            }
+            
+            let vi = start
+            let v = graph.vertices[vi]
+            
+            let startIndex = startIndices[vi]
+
+            for ei in startIndex..<v.edges.count {
+                let e = v.edges[ei]
+                guard e.rem > 0,
+                    depths[vi] < depths[e.head]
+                    else { continue }
+                
+                guard var flow = _search(
+                    graph: graph,
+                    start: e.head,
+                    amount: min(amount, e.rem)) else { continue }
+                
+                flow.reversedPath.append(start)
+                startIndices[vi] = ei
+                return flow
+            }
+            
+            startIndices[vi] = v.edges.count
+            return nil
+        }
+        
+        mutating func search(graph: Graph) -> Flow? {
+            _search(
+                graph: graph,
+                start: graph.source,
+                amount: .max
+                )?.toFlow()
+        }
     }
     
     public mutating func dinic() {
@@ -86,16 +108,16 @@ extension Graph {
                 return
             }
             
+            var dfs = DFS(depths: depths)
+            
             while true {
-                guard let flow = depthFirstSearch(
-                    start: source,
-                    amount: Int.max,
-                    depths: depths)
-                    else { break }
+                guard let flow = dfs.search(graph: self) else {
+                    break
+                }
                 
-                addFlow(flow.toFlow())
+                addFlow(flow)
                 
-                try! imageWriter?.write(graph: toGraphviz())
+                writeImage()
             }
         }
     }

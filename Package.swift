@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "NetworkFlowStudy",
+    platforms: [.macOS(.v10_15)],
     products: [
     ],
     dependencies: [
@@ -23,6 +24,6 @@ let package = Package(
             dependencies: ["Basic", "EdmondsKarp"]),
         .testTarget(
             name: "NetworkFlowStudyTests",
-            dependencies: ["EdmondsKarp"]),
+            dependencies: ["EdmondsKarp", "Dinic"]),
     ]
 )

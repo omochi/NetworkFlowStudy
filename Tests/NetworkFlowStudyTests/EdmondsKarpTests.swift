@@ -50,13 +50,13 @@ public final class EdmondsKarpTests: XCTestCase {
     
         do {
             let edges = g.edges(from: g.source).map { g.edge(at: $0) }
-            let sum = edges.reduce(0) { (s, x) in s + x.used }
+            let sum = edges.map(\.used).reduce(0, +)
             XCTAssertEqual(sum, 17)
         }
         
         do {
             let edges = g.edges(to: g.sink).map { g.edge(at: $0) }
-            let sum = edges.reduce(0) { (s, x) in s + x.used }
+            let sum = edges.map(\.used).reduce(0, +)
             XCTAssertEqual(sum, 17)
         }
     }
@@ -84,13 +84,13 @@ public final class EdmondsKarpTests: XCTestCase {
         
         do {
             let edges = g.edges(from: g.source).map { g.edge(at: $0) }
-            let sum = edges.reduce(0) { (s, x) in s + x.used }
+            let sum = edges.map(\.used).reduce(0, +)
             XCTAssertEqual(sum, 5)
         }
         
         do {
             let edges = g.edges(to: g.sink).map { g.edge(at: $0) }
-            let sum = edges.reduce(0) { (s, x) in s + x.used }
+            let sum = edges.map(\.used).reduce(0, +)
             XCTAssertEqual(sum, 5)
         }
     }

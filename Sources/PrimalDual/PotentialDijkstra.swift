@@ -96,6 +96,10 @@ extension Graph {
             guard flow > 0 else { break }
             addFlow(path: path, amount: flow)
             amount -= flow
+            
+            if imageWriter != nil {
+                print("\(path), \(flow)")
+            }
             writeImage()
         }
     }

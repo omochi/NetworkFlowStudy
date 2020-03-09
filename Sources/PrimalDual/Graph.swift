@@ -50,21 +50,16 @@ public struct Graph {
     public var imageWriter: ImageWriter?
     
     public init(source: Int,
-                sink: Int)
+                sink: Int,
+                vertexCount: Int)
     {
         self.vertices = []
         self.source = source
         self.sink = sink
+        
+        self.vertices = Array(repeating: Vertex(), count: vertexCount)
     }
-  
-    @discardableResult
-    public mutating func addVertex() -> Int {
-        let index = vertices.count
-        let vertex = Vertex()
-        vertices.append(vertex)
-        return index
-    }
-    
+
     public mutating func addEdge(tail: Int, head: Int,
                                  capacity: Int, used: Int = 0,
                                  cost: Int)
